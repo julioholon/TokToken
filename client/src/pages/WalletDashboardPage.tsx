@@ -187,7 +187,7 @@ const WalletDashboardPage: React.FC = () => {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you sure you want to remove this account?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action will sign you out, and you'll need your 22-word recovery phrase to access this wallet again.
+                    This action will sign you out, and you'll need your 12-word recovery phrase to access this wallet again.
                     Make sure you have your recovery phrase saved before continuing.
                   </AlertDialogDescription>
                 </AlertDialogHeader>

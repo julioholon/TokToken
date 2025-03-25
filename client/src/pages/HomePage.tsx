@@ -51,9 +51,12 @@ const HomePage: React.FC = () => {
           </div>
           
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-900">Welcome to Crypto Wallet</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Welcome to TokToken Wallet</h2>
             <p className="text-gray-600 max-w-xs mx-auto">
               A simple and secure way to manage your crypto on the Sepolia testnet
+            </p>
+            <p className="text-sm text-blue-500">
+              toktoken.xyz
             </p>
           </div>
           
