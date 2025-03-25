@@ -1,4 +1,4 @@
-import express, { type Express } from "express";
+import express, { type Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { ethers } from "ethers";
@@ -9,6 +9,15 @@ import {
   type InsertUser
 } from "@shared/schema";
 import { z } from "zod";
+import { SessionData } from "express-session";
+
+// Extend Express session with our custom properties
+declare module "express-session" {
+  interface SessionData {
+    mnemonic?: string;
+    walletAddress?: string;
+  }
+}
 
 // Generate a random username for demo purposes
 function generateRandomUsername() {
@@ -24,9 +33,9 @@ function getProvider() {
 
 // Generate a wallet with a 22-word mnemonic
 function generateWallet() {
-  // Generate wallet with random mnemonic
-  const entropyBytes = ethers.randomBytes(32); // 32 bytes = 256 bits
-  const fullMnemonic = ethers.HDNodeWallet.entropyToMnemonic(entropyBytes);
+  // Generate wallet with random mnemonic (using Wallet.createRandom())
+  const randomWallet = ethers.Wallet.createRandom();
+  const fullMnemonic = randomWallet.mnemonic?.phrase || "";
   
   // Take only the first 22 words for our requirement
   const words = fullMnemonic.split(" ");
@@ -62,7 +71,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const apiRouter = express.Router();
 
   // Create a new wallet
-  apiRouter.post("/wallet/create", async (req, res) => {
+  apiRouter.post("/wallet/create", async (req: Request, res: Response) => {
     try {
       // Validate request body against schema
       const data = walletSetupSchema.parse(req.body);
@@ -81,9 +90,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       await storage.createUser(newUser);
       
       // For demo purposes, we store the mnemonic in session
-      if (!req.session) {
-        req.session = {};
-      }
       req.session.mnemonic = wallet.mnemonic;
       req.session.walletAddress = wallet.address;
       
@@ -102,7 +108,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get recovery phrase
-  apiRouter.get("/wallet/recovery-phrase", async (req, res) => {
+  apiRouter.get("/wallet/recovery-phrase", async (req: Request, res: Response) => {
     try {
       // For demo purposes, get the mnemonic from session
       if (!req.session?.mnemonic || !req.session?.walletAddress) {
@@ -120,7 +126,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get wallet info including balance
-  apiRouter.get("/wallet/info", async (req, res) => {
+  apiRouter.get("/wallet/info", async (req: Request, res: Response) => {
     try {
       // For demo purposes, get the wallet from session
       if (!req.session?.walletAddress) {
