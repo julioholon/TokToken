@@ -167,6 +167,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Restore wallet using recovery phrase
+  apiRouter.post("/wallet/restore", async (req: Request, res: Response) => {
+    try {
+      // Validate the request body (mnemonic and wallet name)
+      const data = z.object({
+        mnemonic: z.string().min(1),
+        walletName: z.string().min(1)
+      }).parse(req.body);
+      
+      // Validate the mnemonic (must be 22 words for our app)
+      const words = data.mnemonic.trim().split(/\s+/);
+      if (words.length !== 22) {
+        return res.status(400).json({ 
+          message: "Invalid recovery phrase. Must be exactly 22 words."
+        });
+      }
+      
+      try {
+        // Verify mnemonic is valid by creating a wallet from it
+        const wallet = ethers.Wallet.fromPhrase(data.mnemonic);
+        
+        // Create a new user with the restored wallet
+        const newUser: InsertUser = {
+          username: generateRandomUsername(),
+          walletName: data.walletName,
+          walletAddress: wallet.address,
+          encryptedMnemonic: data.mnemonic, // In a real app, this should be encrypted
+        };
+        
+        await storage.createUser(newUser);
+        
+        // Store in session
+        req.session.mnemonic = data.mnemonic;
+        req.session.walletAddress = wallet.address;
+        
+        res.status(200).json({ success: true });
+      } catch (error) {
+        return res.status(400).json({ message: "Invalid recovery phrase." });
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ 
+          message: "Invalid request data", 
+          errors: error.errors 
+        });
+      } else {
+        console.error("Error restoring wallet:", error);
+        res.status(500).json({ message: "Failed to restore wallet" });
+      }
+    }
+  });
+  
+  // Remove account / logout
+  apiRouter.post("/wallet/remove", async (req: Request, res: Response) => {
+    try {
+      // Clear the session
+      req.session.mnemonic = undefined;
+      req.session.walletAddress = undefined;
+      
+      // Note: In a real app, you might want to consider actually removing the user data
+      // from the database, but for demo purposes, we'll just clear the session
+      
+      res.status(200).json({ success: true });
+    } catch (error) {
+      console.error("Error removing wallet:", error);
+      res.status(500).json({ message: "Failed to remove wallet" });
+    }
+  });
+  
   // Mount API routes
   app.use("/api", apiRouter);
 

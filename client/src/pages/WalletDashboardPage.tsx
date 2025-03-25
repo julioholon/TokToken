@@ -1,13 +1,28 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useLocation } from 'wouter';
 import Header from '@/components/Header';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import Notification from '@/components/Notification';
 import { useToast } from '@/hooks/use-toast';
+import { apiRequest } from '@/lib/queryClient';
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import type { WalletInfoResponse } from '@shared/schema';
 
 const WalletDashboardPage: React.FC = () => {
   const { toast } = useToast();
+  const [, navigate] = useLocation();
+  const [isRemovingAccount, setIsRemovingAccount] = useState(false);
   const [notification, setNotification] = useState<{ show: boolean; message: string; type: 'success' | 'error' | 'info' }>({
     show: false,
     message: '',
