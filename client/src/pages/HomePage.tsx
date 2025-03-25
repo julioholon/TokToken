@@ -2,36 +2,41 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import type { WalletInfoResponse } from "@shared/schema";
 
 const HomePage: React.FC = () => {
   const [, navigate] = useLocation();
   const [isLoading, setIsLoading] = useState(true);
-
-  // Check if user has a wallet session
-  const { data, isLoading: isQueryLoading, error } = useQuery<WalletInfoResponse>({
-    queryKey: ['/api/wallet/info'],
-    retry: false,
-  });
+  const [walletExists, setWalletExists] = useState(false);
 
   useEffect(() => {
-    // If we finished loading and found a wallet, redirect to dashboard
-    if (!isQueryLoading) {
-      if (data?.walletAddress) {
-        navigate("/dashboard");
+    // Check if user has a wallet session
+    const checkWalletSession = async () => {
+      try {
+        const response = await fetch('/api/wallet/info');
+        
+        if (response.ok) {
+          // User has a wallet, redirect to dashboard
+          setWalletExists(true);
+          navigate("/dashboard");
+        }
+      } catch (error) {
+        console.error("Error checking wallet session:", error);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
-    }
-  }, [data, isQueryLoading, navigate]);
+    };
+
+    checkWalletSession();
+  }, [navigate]);
 
   const handleCreateWallet = () => {
     navigate("/setup");
   };
 
   // If we're still loading or found a wallet, show loading screen
-  if (isLoading || data?.walletAddress) {
+  if (isLoading || walletExists) {
     return <LoadingOverlay isLoading={true} message="Loading..." />;
   }
 
