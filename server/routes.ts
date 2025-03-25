@@ -45,23 +45,20 @@ function getProvider() {
   }
 }
 
-// Generate a wallet with a 22-word mnemonic
+// Generate a wallet with a standard 12-word mnemonic
 function generateWallet() {
   // Generate wallet with random mnemonic (using Wallet.createRandom())
-  const randomWallet = ethers.Wallet.createRandom();
-  const fullMnemonic = randomWallet.mnemonic?.phrase || "";
+  // This automatically generates a standard 12-word mnemonic
+  const wallet = ethers.Wallet.createRandom();
   
-  // Take only the first 22 words for our requirement
-  const words = fullMnemonic.split(" ");
-  const mnemonic22Words = words.slice(0, 22).join(" ");
-  
-  // Create a wallet from the mnemonic
-  const mnemonicWallet = ethers.Wallet.fromPhrase(mnemonic22Words);
+  if (!wallet.mnemonic?.phrase) {
+    throw new Error("Failed to generate wallet mnemonic");
+  }
   
   return {
-    mnemonic: mnemonic22Words,
-    address: mnemonicWallet.address,
-    privateKey: mnemonicWallet.privateKey,
+    mnemonic: wallet.mnemonic.phrase,
+    address: wallet.address,
+    privateKey: wallet.privateKey,
   };
 }
 

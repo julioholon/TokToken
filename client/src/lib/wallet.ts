@@ -10,6 +10,11 @@ export const generateWallet = (): {
   // This will give 12 words by default
   const wallet = ethers.Wallet.createRandom();
   
+  // Handle the case where mnemonic might be null (though it shouldn't be with createRandom)
+  if (!wallet.mnemonic?.phrase) {
+    throw new Error("Failed to generate wallet mnemonic");
+  }
+  
   return {
     mnemonic: wallet.mnemonic.phrase,
     address: wallet.address,
