@@ -55,9 +55,6 @@ const HomePage: React.FC = () => {
             <p className="text-gray-600 max-w-xs mx-auto">
               A simple and secure way to manage your crypto on the Sepolia testnet
             </p>
-            <p className="text-sm text-blue-500">
-              toktoken.xyz
-            </p>
           </div>
           
           <Button 

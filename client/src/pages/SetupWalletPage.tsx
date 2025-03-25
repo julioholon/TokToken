@@ -104,7 +104,7 @@ const SetupWalletPage: React.FC = () => {
       
       <main className="flex-grow px-4 py-6">
         <div className="max-w-md mx-auto">
-          <h2 className="text-xl font-semibold mb-6">Set Up Your TokToken Wallet</h2>
+          <h2 className="text-xl font-semibold mb-6">Set Up Your Wallet</h2>
           
           <Tabs defaultValue="create" value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid grid-cols-2 mb-6">
