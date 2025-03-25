@@ -18,7 +18,12 @@ import { z } from 'zod';
 // Extended schema for recovery
 const recoverySchema = z.object({
   walletName: z.string().min(1, "Wallet name is required"),
-  mnemonic: z.string().min(1, "Recovery phrase is required")
+  mnemonic: z.string()
+    .min(1, "Recovery phrase is required")
+    .refine(
+      (value) => value.trim().split(/\s+/).length === 12,
+      "Recovery phrase must be exactly 12 words"
+    )
 });
 
 type RecoveryFormData = z.infer<typeof recoverySchema>;
@@ -148,7 +153,7 @@ const SetupWalletPage: React.FC = () => {
             
             <TabsContent value="recover">
               <div className="text-sm text-gray-600 mb-4">
-                Restore an existing wallet using your 22-word recovery phrase.
+                Restore an existing wallet using your 12-word recovery phrase.
               </div>
               
               <Form {...recoveryForm}>
@@ -177,17 +182,17 @@ const SetupWalletPage: React.FC = () => {
                     name="mnemonic"
                     render={({ field }) => (
                       <FormItem className="space-y-2">
-                        <FormLabel className="block text-sm font-medium text-gray-700">Recovery Phrase (22 words)</FormLabel>
+                        <FormLabel className="block text-sm font-medium text-gray-700">Recovery Phrase (12 words)</FormLabel>
                         <FormControl>
                           <Textarea 
                             {...field} 
-                            placeholder="Enter your 22-word recovery phrase..." 
+                            placeholder="Enter your 12-word recovery phrase..." 
                             className="w-full min-h-[120px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                             required
                           />
                         </FormControl>
                         <p className="text-xs text-gray-500">
-                          Enter all 22 words in the correct order, separated by spaces.
+                          Enter all 12 words in the correct order, separated by spaces.
                         </p>
                         <FormMessage />
                       </FormItem>

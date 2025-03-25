@@ -176,11 +176,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         walletName: z.string().min(1)
       }).parse(req.body);
       
-      // Validate the mnemonic (must be 22 words for our app)
+      // Validate the mnemonic (must be 12 words for our app)
       const words = data.mnemonic.trim().split(/\s+/);
-      if (words.length !== 22) {
+      if (words.length !== 12) {
         return res.status(400).json({ 
-          message: "Invalid recovery phrase. Must be exactly 22 words."
+          message: "Invalid recovery phrase. Must be exactly 12 words."
         });
       }
       
