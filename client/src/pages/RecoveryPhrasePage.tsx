@@ -69,7 +69,7 @@ const RecoveryPhrasePage: React.FC = () => {
       <main className="flex-grow px-4 py-6">
         <div className="max-w-md mx-auto space-y-6">
           <div className="space-y-2 text-center">
-            <h2 className="text-xl font-semibold">Your Recovery Phrase</h2>
+            <h2 className="text-xl font-semibold">Your TokToken Wallet Recovery Phrase</h2>
             <p className="text-sm text-gray-600">
               Write these words down and store them in a secure location. They are the only way to recover your wallet.
             </p>
