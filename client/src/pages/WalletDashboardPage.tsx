@@ -87,15 +87,16 @@ const WalletDashboardPage: React.FC = () => {
             <div className="space-y-2">
               <p className="text-sm text-gray-500">Wallet Address</p>
               <div className="flex items-center justify-between">
-                <code className="text-xs font-mono bg-gray-100 p-2 rounded overflow-x-auto max-w-[200px]">
-                  {data?.walletAddress || '...'}
-                </code>
-                <button 
-                  className="p-2 text-gray-600 hover:text-primary transition-colors"
+                <code 
+                  className="text-xs font-mono bg-gray-100 p-2 rounded overflow-x-auto max-w-[200px] cursor-pointer hover:bg-gray-200 transition-colors flex items-center"
                   onClick={handleCopyWalletAddress}
+                  title="Click to copy full address"
                 >
-                  <span className="material-icons">content_copy</span>
-                </button>
+                  {data?.walletAddress 
+                    ? `${data.walletAddress.substring(0, 5)}...${data.walletAddress.substring(data.walletAddress.length - 5)}`
+                    : '...'}
+                  <span className="material-icons ml-1 text-xs">content_copy</span>
+                </code>
               </div>
             </div>
           </div>

@@ -24,11 +24,25 @@ function generateRandomUsername() {
   return `user_${Math.random().toString(36).substring(2, 10)}`;
 }
 
-// Get an Ethereum provider
+// Get an Ethereum provider with fallbacks
 function getProvider() {
   const NETWORK = "sepolia";
   const INFURA_API_KEY = process.env.INFURA_API_KEY || "9aa3d95b3bc440fa88ea12eaa4456161"; // Default public key
-  return new ethers.InfuraProvider(NETWORK, INFURA_API_KEY);
+  
+  try {
+    // Try Alchemy provider first (more reliable for Sepolia)
+    const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
+    if (ALCHEMY_API_KEY) {
+      return new ethers.AlchemyProvider(NETWORK, ALCHEMY_API_KEY);
+    }
+    
+    // Try Infura as fallback
+    return new ethers.InfuraProvider(NETWORK, INFURA_API_KEY);
+  } catch (error) {
+    console.error("Error creating provider, using public provider:", error);
+    // Use a public provider as a last resort
+    return ethers.getDefaultProvider(NETWORK);
+  }
 }
 
 // Generate a wallet with a 22-word mnemonic
