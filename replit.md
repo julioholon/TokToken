@@ -117,12 +117,17 @@ TokToken Wallet is a full-stack cryptocurrency wallet application built with Rea
 The project now includes a complete React Native mobile application for Android APK generation.
 
 ### Mobile App Build Process
-1. Navigate to mobile directory: `cd mobile`
-2. Install dependencies: `npm install`
-3. Install Expo CLI: `npm install -g @expo/cli eas-cli`
-4. Login to Expo: `eas login`
-5. Configure build: `eas build:configure`
-6. Build APK: `eas build --platform android --profile preview`
+**Local Development Build (Recommended)**
+1. Install Android Studio with Android SDK (API level 33+)
+2. Navigate to mobile directory: `cd mobile`
+3. Install dependencies: `npm install`
+4. Install Expo CLI: `npm install -g @expo/cli`
+5. Build locally: `npm run build:android`
+
+**Production APK (Alternative)**
+1. Eject from Expo: `npx expo eject`
+2. Build with Gradle: `cd android && ./gradlew assembleDebug`
+3. APK location: `android/app/build/outputs/apk/debug/app-debug.apk`
 
 ### Mobile App Features
 - Native Android application using React Native and Expo
