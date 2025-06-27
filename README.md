@@ -57,37 +57,49 @@ A secure cryptocurrency wallet application for Ethereum on the Sepolia testnet. 
 
 ### Mobile Application (Android APK)
 
-1. **Navigate to mobile directory**:
+**Option 1: Local Development Build (Recommended)**
+
+1. **Install Android Studio** with Android SDK (API level 33+)
+
+2. **Navigate to mobile directory**:
    ```bash
    cd mobile
    ```
 
-2. **Install dependencies**:
+3. **Install dependencies**:
    ```bash
    npm install
    ```
 
-3. **Install Expo CLI globally**:
+4. **Install Expo CLI**:
    ```bash
-   npm install -g @expo/cli eas-cli
+   npm install -g @expo/cli
    ```
 
-4. **Login to Expo**:
+5. **Build locally for Android**:
    ```bash
-   eas login
+   npm run build:android
    ```
 
-5. **Configure build**:
+This creates a development build that runs on your connected Android device or emulator.
+
+**Option 2: Production APK via Expo Eject**
+
+For a standalone APK without Expo dependency:
+
+1. **Eject from Expo**:
    ```bash
-   eas build:configure
+   cd mobile
+   npx expo eject
    ```
 
-6. **Build Android APK**:
+2. **Build APK with Gradle**:
    ```bash
-   eas build --platform android --profile preview
+   cd android
+   ./gradlew assembleDebug
    ```
 
-7. **Download APK**: The APK will be available in your Expo dashboard after build completion
+3. **Find APK**: Located at `android/app/build/outputs/apk/debug/app-debug.apk`
 
 ### Local Mobile Development
 
