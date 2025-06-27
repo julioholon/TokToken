@@ -112,10 +112,30 @@ TokToken Wallet is a full-stack cryptocurrency wallet application built with Rea
 - `ALCHEMY_API_KEY`: Alchemy provider key (optional)
 - `INFURA_API_KEY`: Infura provider key (fallback)
 
+## Mobile Build Instructions
+
+The project now includes a complete React Native mobile application for Android APK generation.
+
+### Mobile App Build Process
+1. Navigate to mobile directory: `cd mobile`
+2. Install dependencies: `npm install`
+3. Install Expo CLI: `npm install -g @expo/cli eas-cli`
+4. Login to Expo: `eas login`
+5. Configure build: `eas build:configure`
+6. Build APK: `eas build --platform android --profile preview`
+
+### Mobile App Features
+- Native Android application using React Native and Expo
+- All core wallet functionality (creation, recovery, balance checking)
+- Secure storage using Expo SecureStore
+- Mobile-optimized UI with React Navigation
+- EAS (Expo Application Services) cloud build system
+
 ## Changelog
 
 ```
 Changelog:
+- June 27, 2025. Added complete React Native mobile app with Android APK build support
 - June 26, 2025. Initial setup
 ```
 
