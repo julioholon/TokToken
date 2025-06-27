@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { ethers } from 'ethers';
+import * as bip39 from 'bip39';
 
 interface WalletData {
   walletName: string;
